@@ -1,6 +1,7 @@
 import uuid
+import shortuuid
 import os
-from typing import List, Optional
+from typing import List, Optional, Literal
 from gql.transport.requests import RequestsHTTPTransport
 from gql import gql, Client
 from dataclasses import asdict
@@ -276,6 +277,27 @@ class OmnivoreQL:
                 "input": {
                     "pageId": page_id,
                     "labelIds": label_ids,
+                }
+            },
+        )
+    def create_highlight(self, article_id: str, annotation: str, 
+                         highlight_type: Literal["HIGHLIGHT", "NOTE"]):
+        """
+        Create a new highlight.
+
+        :param article_id: The ID of the article to create the highlight for.
+        :param annotation: The annotation of the highlight.
+        :param highlight_type: The type of the highlight.
+        """
+        return self.client.execute(
+            self._get_query("CreateHighlight"),
+            variable_values={
+                "input": {
+                    "annotation": annotation,
+                    "articleId": article_id,
+                    "id": str(uuid.uuid4()),
+                    "shortId": str(shortuuid.ShortUUID().random(length=8)),
+                    "type": highlight_type
                 }
             },
         )
