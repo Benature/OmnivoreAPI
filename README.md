@@ -1,4 +1,6 @@
-# OmnivoreQL: Omnivore API client for Python
+# OmnivoreAPI: Omnivore API client for Python
+
+**Forked from OmnivoreQL**
 
 ![OmnivoreQL Icon](https://github.com/yazdipour/OmnivoreQL/assets/8194807/d51d462d-4f5a-4031-980e-1faa5ca3f6e0)
 

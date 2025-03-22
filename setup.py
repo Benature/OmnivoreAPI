@@ -4,16 +4,8 @@ import subprocess
 
 def get_latest_git_tag():
     try:
-        version = subprocess.check_output(["git", "describe", "--tags", "--abbrev=0"])
-        version = version.strip().decode(
-            "utf-8"
-        )  # Remove trailing newline and decode bytes to string
-
-        # Remove the 'v' from the tag
-        if version.startswith("v"):
-            version = version[1:]
-
-        return version
+        import omnivore_api
+        return omnivore_api.__version__
     except Exception as e:
         print(f"An exception occurred while getting the latest git tag: {e}")
         return None
@@ -32,18 +24,18 @@ PROJECT_URLS = {
 }
 
 setup(
-    name="omnivoreql",
+    name="omnivore_api",
     version=VERSION,
     description="Omnivore API Client for Python",
-    author="Shahriar Yazdipour",
-    author_email="git@yazdipour.com",
+    author="Benature",
+    author_email="",
     packages=find_packages(),
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     license="MIT",
     keywords="omnivore api readlater graphql gql client",
     platforms="any",
-    url="https://github.com/yazdipour/OmnivoreQL",
+    url="https://github.com/Benature/OmnivoreAPI",
     project_urls=PROJECT_URLS,
     include_package_data=True,
     python_requires=">=3",

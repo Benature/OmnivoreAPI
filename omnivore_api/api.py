@@ -8,7 +8,7 @@ from dataclasses import asdict
 from .models import CreateLabelInput
 
 
-class OmnivoreQL:
+class OmnivoreAPI:
 
     def __init__(
         self,
