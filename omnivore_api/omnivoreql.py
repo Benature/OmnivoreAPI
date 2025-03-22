@@ -9,10 +9,11 @@ from .models import CreateLabelInput
 
 
 class OmnivoreQL:
+
     def __init__(
         self,
         api_token: str,
-        graphql_endpoint_url: str = "https://api-prod.omnivore.app/api/graphql",
+        graphql_endpoint_url: str,
     ) -> None:
         """
         Initialize a new instance of the GraphQL client.
@@ -22,25 +23,30 @@ class OmnivoreQL:
         """
         transport = RequestsHTTPTransport(
             url=graphql_endpoint_url,
-            headers={"content-type": "application/json", "authorization": api_token},
+            headers={
+                "content-type": "application/json",
+                "authorization": api_token
+            },
             use_json=True,
         )
-        self.client = Client(transport=transport, fetch_schema_from_transport=False)
+        self.client = Client(transport=transport,
+                             fetch_schema_from_transport=False)
         self.queries = {}
 
     def _get_query(self, query_name: str) -> str:
         if query_name not in self.queries:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            query_file_path = os.path.join(current_dir, f"queries/{query_name}.graphql")
+            query_file_path = os.path.join(current_dir,
+                                           f"queries/{query_name}.graphql")
             with open(query_file_path, "r") as file:
                 self.queries[query_name] = gql(file.read())
         return self.queries[query_name]
 
     def save_url(
-        self,
-        url: str,
-        labels: Optional[List[str]] = None,
-        client_request_id: str = str(uuid.uuid4()),
+            self,
+            url: str,
+            labels: Optional[List[str]] = None,
+            client_request_id: str = str(uuid.uuid4()),
     ):
         """
         Save a URL to Omnivore.
@@ -62,7 +68,10 @@ class OmnivoreQL:
             },
         )
 
-    def save_page(self, url: str, original_content: str, labels: List[str] = None):
+    def save_page(self,
+                  url: str,
+                  original_content: str,
+                  labels: List[str] = None):
         """
         Save a page with html content to Omnivore.
 
@@ -130,7 +139,11 @@ class OmnivoreQL:
             },
         )
 
-    def get_article(self, username: str, slug: str, format: str = None, include_content: bool = False):
+    def get_article(self,
+                    username: str,
+                    slug: str,
+                    format: str = None,
+                    include_content: bool = False):
         """
         Get an article by username and slug.
 
@@ -157,7 +170,12 @@ class OmnivoreQL:
         """
         return self.client.execute(
             self._get_query("ArchiveSavedItem"),
-            variable_values={"input": {"linkId": article_id, "archived": to_archive}},
+            variable_values={
+                "input": {
+                    "linkId": article_id,
+                    "archived": to_archive
+                }
+            },
         )
 
     def unarchive_article(self, article_id: str):
@@ -176,7 +194,12 @@ class OmnivoreQL:
         """
         return self.client.execute(
             self._get_query("DeleteSavedItem"),
-            variable_values={"input": {"articleID": article_id, "bookmark": False}},
+            variable_values={
+                "input": {
+                    "articleID": article_id,
+                    "bookmark": False
+                }
+            },
         )
 
     def create_label(self, label: CreateLabelInput):
@@ -190,9 +213,11 @@ class OmnivoreQL:
             variable_values={"input": asdict(label)},
         )
 
-    def update_label(
-        self, label_id: str, name: str, color: str, description: str = None
-    ):
+    def update_label(self,
+                     label_id: str,
+                     name: str,
+                     color: str,
+                     description: str = None):
         """
         Update a label.
 
@@ -224,9 +249,8 @@ class OmnivoreQL:
             variable_values={"id": label_id},
         )
 
-    def set_page_labels(
-        self, page_id: str, labels: List[CreateLabelInput]
-    ) -> dict:
+    def set_page_labels(self, page_id: str,
+                        labels: List[CreateLabelInput]) -> dict:
         """
         Set labels for a page.
 
@@ -235,7 +259,8 @@ class OmnivoreQL:
         """
         return self.set_page_labels_by_fields(page_id, labels)
 
-    def set_page_labels_by_fields(self, page_id: str, labels: List[dict]) -> dict:
+    def set_page_labels_by_fields(self, page_id: str,
+                                  labels: List[dict]) -> dict:
         """
         Set labels for a page.
 
@@ -246,13 +271,11 @@ class OmnivoreQL:
         for label in labels:
             if isinstance(label, CreateLabelInput):
                 label = asdict(label)
-            parsed_labels.append(
-                {
-                    "name": label["name"],
-                    "color": label["color"],
-                    "description": label["description"],
-                }
-            )
+            parsed_labels.append({
+                "name": label["name"],
+                "color": label["color"],
+                "description": label["description"],
+            })
 
         return self.client.execute(
             self._get_query("ApplyLabels"),
@@ -264,7 +287,8 @@ class OmnivoreQL:
             },
         )
 
-    def set_page_labels_by_ids(self, page_id: str, label_ids: List[str]) -> dict:
+    def set_page_labels_by_ids(self, page_id: str,
+                               label_ids: List[str]) -> dict:
         """
         Set labels for a page.
 
@@ -280,7 +304,8 @@ class OmnivoreQL:
                 }
             },
         )
-    def create_highlight(self, article_id: str, annotation: str, 
+
+    def create_highlight(self, article_id: str, annotation: str,
                          highlight_type: Literal["HIGHLIGHT", "NOTE"]):
         """
         Create a new highlight.
