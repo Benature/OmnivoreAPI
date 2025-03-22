@@ -32,6 +32,15 @@ class OmnivoreAPI:
         self.client = Client(transport=transport,
                              fetch_schema_from_transport=False)
         self.queries = {}
+        self._username = None
+
+    @property
+    def username(self) -> str:
+        if self._username is None:
+            profile = self.get_profile()
+            username = profile['me']['profile']['username']
+            self._username = username
+        return self._username
 
     def _get_query(self, query_name: str) -> str:
         if query_name not in self.queries:
@@ -115,7 +124,7 @@ class OmnivoreAPI:
         self,
         limit: int = None,
         after: int = 0,
-        format: str = "html",
+        format: Literal['html', 'markdown'] = "html",
         query: str = "in:inbox",
         include_content: bool = False,
     ):
@@ -305,7 +314,42 @@ class OmnivoreAPI:
             },
         )
 
-    def create_highlight(self, article_id: str, annotation: str,
+    def _query_label_id(self, label_name: str):
+        labels = getattr(self, "labels", dict())
+        if label_name in labels:
+            return labels[label_name]["id"]
+        else:
+            refreshed_labels = self.get_labels()['labels']['labels']
+            labels.update({label["name"]: label for label in refreshed_labels})
+            self.labels = labels
+            if label_name not in labels:
+                raise ValueError(f"Label {label_name} not found.")
+            return labels[label_name]["id"]
+
+    def update_page_labels(self, slug: str, labels: List[str] | str):
+        if isinstance(labels, str):
+            labels = [labels]
+        new_labels = [self._query_label_id(l) for l in labels]
+
+        # query existed labels
+        article = self.get_article(self.username, slug)['article']['article']
+        page_id = article['id']
+        old_labels = [l['id'] for l in article['labels']]
+
+        labels = old_labels + new_labels
+        labels = list(dict.fromkeys(labels))
+
+        return self.client.execute(
+            self._get_query("ApplyLabels"),
+            variable_values={
+                "input": {
+                    "pageId": page_id,
+                    "labelIds": labels,
+                }
+            },
+        )
+
+    def create_highlight(self, page_id: str, annotation: str,
                          highlight_type: Literal["HIGHLIGHT", "NOTE"]):
         """
         Create a new highlight.
@@ -319,7 +363,7 @@ class OmnivoreAPI:
             variable_values={
                 "input": {
                     "annotation": annotation,
-                    "articleId": article_id,
+                    "articleId": page_id,
                     "id": str(uuid.uuid4()),
                     "shortId": str(shortuuid.ShortUUID().random(length=8)),
                     "type": highlight_type
