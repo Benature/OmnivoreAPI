@@ -19,8 +19,8 @@ def read_requirements():
 VERSION = get_latest_git_tag() or "0.0.1"  # Fallback version
 
 PROJECT_URLS = {
-    "Bug Tracker": "https://github.com/yazdipour/OmnivoreQL/issues",
-    "Source Code": "https://github.com/yazdipour/OmnivoreQL",
+    "Bug Tracker": "https://github.com/Benature/OmnivoreAPI/issues",
+    "Source Code": "https://github.com/Benature/OmnivoreAPI",
 }
 
 setup(
