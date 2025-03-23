@@ -7,7 +7,7 @@
 This is a Python client for the [Omnivore API](https://omnivore.app).
 
 
-[![Tests](https://github.com/Benature/OmnivoreAPI/actions/workflows/test.yml/badge.svg)](https://github.com/Benature/OmnivoreAPI/actions/workflows/test.yml)
+<!-- [![Tests](https://github.com/Benature/OmnivoreAPI/actions/workflows/test.yml/badge.svg)](https://github.com/Benature/OmnivoreAPI/actions/workflows/test.yml) -->
 [![PyPI version](https://badge.fury.io/py/omnivore_api.svg)](https://pypi.org/project/omnivore_api/)
 
 ## How to use
@@ -59,8 +59,8 @@ omnivore.create_label(CreateLabelInput("label1", "#00ff00", "This is label descr
 
 If you find this project useful, you can support it by becoming a sponsor. Your contribution will help maintain the project and keep it up to date.
 
-[![GitHub stars](https://img.shields.io/github/stars/Benature/omnivore_api.svg?style=social&label=Star)](https://github.com/Benature/omnivore_api/stargazers)
-[![Github Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Benature)
+<!-- [![GitHub stars](https://img.shields.io/github/stars/Benature/omnivore_api.svg?style=social&label=Star)](https://github.com/Benature/omnivore_api/stargazers)
+[![Github Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Benature) -->
 
 ## License
 
@@ -70,4 +70,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Check out our growth in the community:
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Benature/OmnivoreAPI&type=Date)](https://star-history.com/#Benature/OmnivoreAPI&Date)
+<!-- [![Star History Chart](https://api.star-history.com/svg?repos=Benature/OmnivoreAPI&type=Date)](https://star-history.com/#Benature/OmnivoreAPI&Date) -->
