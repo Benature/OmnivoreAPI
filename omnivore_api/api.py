@@ -12,10 +12,12 @@ from .models import CreateLabelInput
 
 class OmnivoreAPI:
 
+    DEFAULT_GRAPHQL_ENDPOINT = "https://api-prod.omnivore.app/api/graphql"
+
     def __init__(
         self,
         api_token: str,
-        graphql_endpoint_url: str,
+        graphql_endpoint_url: str = DEFAULT_GRAPHQL_ENDPOINT,
     ) -> None:
         """
         Initialize a new instance of the GraphQL client.
